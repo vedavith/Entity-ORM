@@ -1,0 +1,19 @@
+#!/usr/bin/php
+<?php
+
+require_once '../vendor/autoload.php';
+require_once '../EntityModels/BuildEntity.php';
+
+use Symfony\Component\Console\Application;
+use EntityORM\EntityModels\BuildEntity as EntityBuilder;
+
+
+class CommandBuilder extends Application {
+    public function __construct(){
+        parent::__construct();
+        $this->add(new EntityBuilder());
+        $this->run();
+    }
+}
+
+new CommandBuilder();

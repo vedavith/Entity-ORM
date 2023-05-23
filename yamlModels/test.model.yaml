@@ -1,0 +1,20 @@
+model: User
+fields:
+  id:
+    type: 'int,'
+    not_null: 'true,'
+    primary: 'true,'
+    autoincrement: 'true'
+  email:
+    type: 'string'
+    required: 'true'
+  first_name:
+    type: 'string'
+    max_length: '50'
+  last_name:
+    type: 'string'
+    max_length: '50'
+  created_on:
+    type: 'datetime'
+  updated_on:
+    type: 'datetime'
