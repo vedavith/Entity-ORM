@@ -17,10 +17,22 @@ class GenerateModel extends IModelMeta {
         return true;
     }
 
+    /**
+     * buildTableFromMeta - Builds table from YAML Object
+     *
+     * @param object $yamlObject
+     * @return boolean|Exception
+     */
     protected function buildTableFromMeta(object $yamlObject) : bool | \Exception {
         return true;
     }
 
+    /**
+     * buildModelFromMeta - builds a POPO (Plain Old PHP Object) from YAML Object
+     *
+     * @param object $yamlObject
+     * @return boolean|Exception
+     */
     protected function buildModelFromMeta(object $yamlObject) : bool | \Exception {
         return true;
     }
@@ -43,5 +55,4 @@ class GenerateModel extends IModelMeta {
         }
 
     }
-
 }
