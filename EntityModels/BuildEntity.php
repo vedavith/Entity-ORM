@@ -16,9 +16,6 @@ use Symfony\Component\Console\Output\StreamOutput as Streamout;
 //ModelGenerator
 use EntityORM\EntityModels\GenerateModel as ModelGenerator;
 
-
-
-
 //use EntityORM\EntityConnector\EntityDriver;
 
 class BuildEntity extends Cmd {
@@ -29,7 +26,6 @@ class BuildEntity extends Cmd {
 
     public function __construct() {
         parent::__construct();
-
         //object for ModelGenerator
         $this->modGenObject = new ModelGenerator();
     }
@@ -37,45 +33,38 @@ class BuildEntity extends Cmd {
     protected function configure() : void {
         $this->setName('create-model')
             ->setDescription('Creates a table and generates a model in models path')
-            ->setHelp('Allows user to generate a table depending on model YAML file')
+            ->setHelp("Allows user to generate a table depending on model YAML file\n Usage: Entity:Gen generate-models --model=[modelName]")
             ->addOption('model', null, Inop::VALUE_OPTIONAL);
     }
 
-    protected function execute(Input $input, Output $output) : ?int {
-        $model = $input->getOption('model');
-        if($model) {
-            $path = '../yamlModels/'.$model.'.model.yaml';
-            if(!file_exists($path)) {
-                $output->writeln("<error>File not found</error>");
-                return Cmd::FAILURE;
-            } 
-            
-            try{
-                $yamlToArray = yaml_parse_file($path, 0);
-                var_dump($yamlToArray);
-                $output->writeln('<comment>Reading a YAML file...</comment>');
-                $output->writeln('<comment>Generating Model...</comment>');
-                
-                //todo: creating a table from the yaml data
-                if($this->modGenObject->__builder((object)$yamlToArray) instanceof \Exception){
-                    throw new \Exception("Could not Create a Model"); 
-                }
+    protected function execute(Input $input, Output $output) : ?int
+    {
+        try {
+            $model = $input->getOption('model');
 
-                return Cmd::SUCCESS;
-            } catch (\Exception $ex) {
-                $output->writeln("<error>".$ex->getMessage()."<error>");
-            } finally {
-               //do final stuff - returning 
-               return Cmd::SUCCESS;
+            if(empty($model)) {
+                throw new \Exception("Please provide the file-name which has *.model.yaml extension");
             }
-        } else {
-            $output->writeln("Please provide the file-name which has *.model.yaml extension");
+
+            $path = '../JsonModels/'.$model.'.model.json';
+            if(!file_exists($path)) {
+                throw new \Exception("File not found");
+            }
+            // For compatability reasons we have changed to yaml to json
+            $output->writeln('<comment>Reading a Json file...</comment>');
+            $fileData = file_get_contents($path);
+            $model = json_decode($fileData, true);
+            $output->writeln('<comment>Generating Model...</comment>');
+                
+            // todo: creating a table from the json data
+            if($this->modGenObject->__builder(builderMeta: (object)$model, table: true) instanceof \Exception) {
+                throw new \Exception("Could not Create a Model");
+            }
+
+            return Cmd::SUCCESS;
+        } catch (\Exception $ex) {
+            $output->writeln("<error>".$ex->getMessage()."<error>");
             return Cmd::FAILURE;
         }
     }
-
-    private function yamlParser($filepath, $seek = 0) {
-        return yaml_parse_file();
-    }
-
 }

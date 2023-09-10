@@ -41,7 +41,7 @@ class EntityDriver extends PDO
         }
     }
 
-    public function select($values = [], $table): object
+    public function select($table, $values = []): object
     {
         $this->queryType="S";
         $values = "*";
