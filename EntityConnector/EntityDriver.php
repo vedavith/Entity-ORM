@@ -36,9 +36,11 @@ class EntityDriver extends PDO
     //todo:  add all available drivers
     private function prepareConnectionStringByDriver(): string
     {
+        $connString = '';
         if ($this->params->driver == "mysql") {
-            return "mysql:host=" . $this->params->host . ";dbname=" . $this->params->database;
+            $connString =  "mysql:host=" . $this->params->host . ";dbname=" . $this->params->database;
         }
+        return $connString;
     }
 
     public function select($table, $values = []): object
@@ -101,6 +103,21 @@ class EntityDriver extends PDO
         $this->executeQuery();
         $this->returnResult = $this->returnPrepare->fetchall();
         return $this;
+    }
+
+    /**
+     * create - Creates table using meta
+     */
+    public function create($meta): bool|\PDOException
+    {
+        try {
+            $sql = "CREATE TABLE IF NOT EXISTS $meta->table ($meta->columns)";
+            $sqlPrepd = $this->prepare($sql);
+            return $sqlPrepd->execute();
+        } catch (PDOException $pe) {
+            var_dump($pe->getMessage());
+            return false;
+        }
     }
 }
 /**

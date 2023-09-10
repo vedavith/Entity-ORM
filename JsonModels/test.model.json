@@ -2,28 +2,30 @@
   "model": "User",
   "fields": {
     "id": {
-      "type": "int,",
-      "not_null": "true,",
-      "primary": "true,",
-      "autoincrement": "true"
+      "type": "int",
+      "not_null": "true",
+      "primary": "true",
+      "autoincrement": "true",
+      "maxLength" : "40"
     },
     "email": {
       "type": "string",
-      "required": "true"
+      "required": "true",
+      "maxLength": "100"
     },
     "first_name": {
       "type": "string",
-      "max_length": "50"
+      "maxLength": "50"
     },
     "last_name": {
       "type": "string",
-      "max_length": "50"
+      "maxLength": "50"
     },
     "created_on": {
       "type": "datetime"
     },
     "updated_on": {
-      "type": "datetime"
+      "type": "date"
     }
   }
 }

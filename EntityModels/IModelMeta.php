@@ -6,9 +6,27 @@ abstract class IModelMeta {
     private string $dateTime;
     private string $maxLength;
     private bool $autoIncrement;
+    private readonly array $dataTypeMapper;
+    private array $logs;
 
     //todo: Add getters and setters for keywords
-   
+
+    public function getDataTypeMapper($dataType) : string {
+        $dataTypeMapper = [
+            'int' => 'INTEGER',
+            'integer' => 'INTEGER',
+            'float' => 'DECIMAL',
+            'char' => 'CHAR',
+            'string' => 'VARCHAR',
+            'datetime' => 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL',
+            'date' => 'DATE'
+        ];
+        if (!array_key_exists($dataType, $dataTypeMapper)) {
+            return 'VARCHAR';
+        }
+        return $dataTypeMapper[$dataType];
+    }
+
     /**
      * Get the value of int
      */ 
@@ -40,7 +58,6 @@ abstract class IModelMeta {
      */ 
     public function setFloat(string $float) : self {
         $this->float = $float == "float" ? "DECIMAL" : null;
-
         return $this;
     }
 
@@ -96,6 +113,26 @@ abstract class IModelMeta {
         return $this;
     }
 
+    protected function setLogs($logs) : void {
+        $this->logs[] = $logs;
+        $this->generateLogs();
+    }
+
+    protected function getLogs() : array {
+        return $this->logs;
+    }
+
+    /**
+     * Destructor to log Exceptions
+     *
+     */
+    private function generateLogs() {
+        $logs = $this->getLogs();
+        if (!empty($logs)) {
+            error_log(json_encode($logs));
+        }
+    }
+
     //abstract model methods
     /**
      * validateModel - Used to validate yaml Object
@@ -105,17 +142,17 @@ abstract class IModelMeta {
      */
     abstract protected function validateModel(object $yamlObject) : bool| \Exception;
     /**
-     * buildTableFromMeta - Builds table from YAML Object
+     * buildTableFromMeta - Builds table from JSON Object
      *
-     * @param object $yamlObject
+     * @param object $builderMeta
      * @return boolean|Exception
      */
-    abstract protected function buildTableFromMeta(object $yamlObject) : bool | \Exception;
+    abstract protected function buildTableFromMeta(object $builderMeta) : bool | \Exception;
     /**
      * buildModelFromMeta - builds a POPO (Plain Old PHP Object) from YAML Object
      *
-     * @param object $yamlObject
+     * @param object $builderMeta
      * @return boolean|Exception
      */
-    abstract protected function buildModelFromMeta(object $yamlObject) : bool | \Exception;   
+    abstract protected function buildModelFromMeta(object $builderMeta) : bool | \Exception;
 }

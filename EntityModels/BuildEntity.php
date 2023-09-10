@@ -50,13 +50,14 @@ class BuildEntity extends Cmd {
             if(!file_exists($path)) {
                 throw new \Exception("File not found");
             }
+
             // For compatability reasons we have changed to yaml to json
             $output->writeln('<comment>Reading a Json file...</comment>');
             $fileData = file_get_contents($path);
-            $model = json_decode($fileData, true);
-            $output->writeln('<comment>Generating Model...</comment>');
-                
-            // todo: creating a table from the json data
+            $model = json_decode($fileData);
+            $output->writeln('<comment>Generating Table and Models...</comment>');
+
+            // Generating Models
             if($this->modGenObject->__builder(builderMeta: (object)$model, table: true) instanceof \Exception) {
                 throw new \Exception("Could not Create a Model");
             }
