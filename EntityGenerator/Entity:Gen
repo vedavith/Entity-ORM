@@ -2,10 +2,10 @@
 <?php
 
 require_once '../vendor/autoload.php';
-require_once '../EntityModels/BuildEntity.php';
+require_once '../EntityGenerator/BuildEntity.php';
 
 use Symfony\Component\Console\Application;
-use EntityORM\EntityModels\BuildEntity as EntityBuilder;
+use EntityORM\EntityGenerator\BuildEntity as EntityBuilder;
 
 
 class CommandBuilder extends Application {

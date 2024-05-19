@@ -1,18 +1,24 @@
-<?php 
-namespace EntityORM\EntityModels;
+<?php
+
+namespace EntityORM\EntityGenerator;
 
 require_once '../vendor/autoload.php';
 require_once '../EntityConnector/EntityDriver.php';
 require_once 'IModelMeta.php';
+require_once '../Core/ModelGenerator.php';
 
 use EntityORM\EntityConnector\EntityDriver as Driver;
-use EntityORM\EntityModels\ModelMeta\IModelMeta;
+use EntityORM\EntityGenerator\ModelMeta\IModelMeta;
+use EntityORM\Core\ModelGenerator as Generator;
 
 class GenerateModel extends IModelMeta {
     private $driverObject;
     private object $metaObject;
     private $logger;
 
+    /**
+     *  Constructor
+     */
     public function __construct() {
         $this->driverObject = new Driver();
     }
@@ -33,11 +39,10 @@ class GenerateModel extends IModelMeta {
                     \Fiber::suspend($begin);
                 }
                 \Fiber::suspend($begin);
-
             });
 
             $modelFiber->start(begin: $table);
-            if(!$modelFiber->resume($this->buildModelFromMeta($builderMeta))) {
+            if(!$modelFiber->resume($this->generateModelFile($builderMeta))) {
                 throw new \Exception("Model Building Failed");
             }
             return false;
@@ -66,10 +71,13 @@ class GenerateModel extends IModelMeta {
      * @return boolean|\Exception
      */
     protected function buildModelFromMeta(object $builderMeta) : bool | \Exception {
-        var_dump(__FUNCTION__, $builderMeta);
-        return true;
+       return true;
     }
 
+    /**
+     * @param object $builderMeta
+     * @return self
+     */
     private function extractMeta(object $builderMeta) : self {
         $meta = new \stdClass();
         $meta->table = $builderMeta->model;
@@ -90,6 +98,9 @@ class GenerateModel extends IModelMeta {
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     private function generateTable() : bool {
         try {
             return $this->driverObject->create($this->metaObject);
@@ -99,17 +110,24 @@ class GenerateModel extends IModelMeta {
         }
     }
 
-    private function generateModelFile() : bool {
+    /**
+     * @param object $builderMeta
+     * @return bool
+     */
+    private function generateModelFile(object $builderMeta) : bool {
         try {
-            $x = 1+1;
+            return (new Generator())->generateModel($builderMeta);
         } catch (\Exception $ex) {
             $this->setLogs([__FUNCTION__ => $ex->getMessage()]);
             return false;
         }
-        return $x;
     }
 
-    protected function validateModel(object $yamlObject) : bool {
+    /**
+     * @param object $builderMeta
+     * @return bool
+     */
+    protected function validateModel(object $builderMeta) : bool {
         return true;
     }
 

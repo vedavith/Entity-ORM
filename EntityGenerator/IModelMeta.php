@@ -1,5 +1,5 @@
 <?php
-namespace EntityORM\EntityModels\ModelMeta;
+namespace EntityORM\EntityGenerator\ModelMeta;
 abstract class IModelMeta {
     private string $int;
     private string $float;

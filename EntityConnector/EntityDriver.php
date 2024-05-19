@@ -4,6 +4,7 @@ namespace EntityORM\EntityConnector;
 
 use PDO;
 use PDOException;
+use PDOStatement;
 
 define('INI_PATH', '../config.ini');
 class EntityDriver extends PDO
@@ -118,6 +119,11 @@ class EntityDriver extends PDO
             var_dump($pe->getMessage());
             return false;
         }
+    }
+
+    public function fetchAll($class, $mode=PDO::FETCH_CLASS): array
+    {
+        return (new \PDOStatement)->fetchAll($mode, $class);
     }
 }
 /**
