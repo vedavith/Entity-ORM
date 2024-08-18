@@ -1,6 +1,7 @@
 {
     "require": {
-      "symfony/console": "^6.1",
-      "ext-pdo": "*"
+      "symfony/console": "^v6.4.8",
+      "ext-pdo": "*",
+      "symfony/dependency-injection": "^v7.1.1"
     }
 }

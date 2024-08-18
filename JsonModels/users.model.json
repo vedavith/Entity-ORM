@@ -27,5 +27,12 @@
     "updated_on": {
       "type": "date"
     }
+  },
+  "joins": {
+    "model": "UserDetails",
+    "joinsOn": "userData.id",
+    "fields": {
+      "$ref": "userdetails.model.json"
+    }
   }
 }

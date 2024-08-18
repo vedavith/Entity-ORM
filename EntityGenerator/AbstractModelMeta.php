@@ -1,6 +1,8 @@
 <?php
 namespace EntityORM\EntityGenerator\ModelMeta;
-abstract class IModelMeta {
+use Exception;
+
+abstract class AbstractModelMeta {
     private string $int;
     private string $float;
     private string $dateTime;
