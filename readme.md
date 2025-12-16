@@ -1,27 +1,32 @@
-Entity-ORM
-================================ 
-**Feature 1:** (In Progress)
- - Generating the MySql Table and related POCO class with given json object.
+# Entity-ORM
 
-----------------------------------------------------
+A simple PHP Entity ORM for generating and managing entity models.
 
-**Folder Structure:**
+## Installation
 
-Core -
- - [ModelGenerator.php](Core%2FModelGenerator.php)
+Install via Composer:
 
-EntityConnector -
- - [EntityDriver.php](EntityConnector%2FEntityDriver.php)
+```bash
+composer require entity-orm/entity-orm
+```
 
-EntityGenerator -
- - [BuildEntity.php](EntityGenerator%2FBuildEntity.php)
- - [Entity:Gen](EntityGenerator%2FEntity%3AGen)
- - [GenerateModel.php](EntityGenerator%2FGenerateModel.php)
- - [IModelMeta.php](EntityGenerator%2FIModelMeta.php)
+## Features
 
-EntityModels -
- - [UserData.php](EntityModels%2FUserData.php)
+- Generating MySQL tables and related POCO classes from JSON objects.
 
-JsonModels -
- - [test.model.json](JsonModels%2Ftest.model.json)
+## Folder Structure
+
+- `src/Core/` - Core classes like ModelGenerator
+- `src/EntityConnector/` - Database connection classes
+- `src/EntityGenerator/` - Model generation logic
+- `src/EntityModels/` - Generated model classes
+- `tests/` - Test files
+
+## Usage
+
+// TODO: Add usage examples
+
+## License
+
+MIT
 

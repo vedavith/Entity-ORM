@@ -2,13 +2,6 @@
 
 namespace EntityORM\EntityGenerator;
 
-require_once '../vendor/autoload.php';
-// Load this By DI
-require_once '../EntityConnector/EntityDriver.php';
-require_once 'AbstractModelMeta.php';
-// Load this BY DI
-require_once '../Core/ModelGenerator.php';
-
 use EntityORM\EntityConnector\EntityDriver as Driver;
 use EntityORM\EntityGenerator\ModelMeta\AbstractModelMeta;
 use EntityORM\Core\ModelGenerator as Generator;

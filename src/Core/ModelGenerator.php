@@ -11,6 +11,12 @@ class ModelGenerator
         $this->path = "../EntityModels/";
     }
 
+    public function setPath(string $path): self
+    {
+        $this->path = $path;
+        return $this;
+    }
+
     public function generateModel(\stdClass $model) : ?bool
     {
         $template = $this->fileGenerator($model);
@@ -50,7 +56,7 @@ class ModelGenerator
         $fileTemplate .= "\t/** __get **/\n";
         $fileTemplate .= "\tpublic function __get($".$prop.") {\n";
         $fileTemplate .= "\t if (property_exists(\$".$currentInstance.",\$".$prop.")) {\n";
-        $fileTemplate .= "\t\t return \$".$currentInstance."->\$".$prop."();\n";
+        $fileTemplate .= "\t\t return \$".$currentInstance."->\$".$prop.";\n";
         $fileTemplate .= "\t }\n";
         $fileTemplate .= "\t}\n\n";
         $fileTemplate .= "\t/** __set **/\n";

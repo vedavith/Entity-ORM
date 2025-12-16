@@ -18,13 +18,15 @@ class EntityDriver extends PDO
     {
         if (empty($configOverride)) {
             //todo: convert result array into object
-            $iniData = (parse_ini_file(INI_PATH, true))['mysql'];
+            $iniData = (parse_ini_file('../config.ini', true))['mysql'];
             $this->params = new \stdClass();
             $this->params->host = $iniData['host'];
             $this->params->username = $iniData['username'];
             $this->params->password = $iniData['password'];
             $this->params->database = $iniData['database'];
             $this->params->driver = $iniData['driver'];
+        } else {
+            $this->params = $configOverride;
         }
         $this->connectionString = $this->prepareConnectionStringByDriver($this->params);
         parent::__construct($this->connectionString, $this->params->username, $this->params->password);

@@ -1,6 +1,6 @@
 <?php
 
-namespace EntityORM\Test;
+namespace EntityORM\Tests;
 
 class GetUsers
 {

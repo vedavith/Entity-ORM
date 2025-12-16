@@ -1,9 +1,6 @@
 <?php
 namespace EntityORM\EntityGenerator;
 
-require_once '../vendor/autoload.php';
-require_once '../EntityGenerator/GenerateModel.php';
-
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command as Cmd;
 use Symfony\Component\Console\Input\InputInterface as Input;
