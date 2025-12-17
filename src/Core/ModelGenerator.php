@@ -1,5 +1,5 @@
 <?php
-namespace EntityORM\Core;
+namespace EntityForge\Core;
 
 class ModelGenerator
 {
@@ -8,7 +8,7 @@ class ModelGenerator
 
     public function __construct()
     {
-        $this->path = "../EntityModels/";
+        $this->path = __DIR__ . '/../../EntityModels/';
     }
 
     public function setPath(string $path): self
@@ -20,11 +20,14 @@ class ModelGenerator
     public function generateModel(\stdClass $model) : ?bool
     {
         $template = $this->fileGenerator($model);
-        $fileData = false;
-        if (is_writable(dirname($this->path))) {
-            $fileData = file_put_contents($this->path.$this->className.".php", $template);
+        // Ensure target directory exists and is writable
+        if (!is_dir($this->path)) {
+            mkdir($this->path, 0755, true);
         }
-        return $fileData;
+        if (is_writable($this->path)) {
+            return file_put_contents($this->path . $this->className . ".php", $template);
+        }
+        return false;
     }
 
     private function fileGenerator($modelData) : ?string
@@ -33,7 +36,7 @@ class ModelGenerator
         // PHP Template
         $fileTemplate = "<?php\n\n";
         $fileTemplate.= "// This File is Generated with Entity ORM. \n\n";
-        $fileTemplate.= "namespace EntityORM\EntityModels;\n\n";
+            $fileTemplate.= "namespace EntityForge\EntityModels;\n\n";
         $fileTemplate.= "class ".$this->className."\n";
         $fileTemplate .= "{\n\n";
 

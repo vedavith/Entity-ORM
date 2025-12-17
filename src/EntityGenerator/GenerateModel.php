@@ -1,13 +1,12 @@
 <?php
 
-namespace EntityORM\EntityGenerator;
+namespace EntityForge\EntityGenerator;
 
-use EntityORM\EntityConnector\EntityDriver as Driver;
-use EntityORM\EntityGenerator\ModelMeta\AbstractModelMeta;
-use EntityORM\Core\ModelGenerator as Generator;
+use EntityForge\EntityGenerator\ModelMeta\AbstractModelMeta;
+use EntityForge\Core\ModelGenerator as Generator;
+use EntityForge\Core\RepositoryGenerator as RepoGenerator;
 
 class GenerateModel extends AbstractModelMeta {
-    private $driverObject;
     private object $metaObject;
     private $logger;
 
@@ -15,7 +14,7 @@ class GenerateModel extends AbstractModelMeta {
      *  Constructor
      */
     public function __construct() {
-        $this->driverObject = new Driver();
+        // Delay driver instantiation until needed (avoid requiring PDO driver when not creating tables)
     }
 
     /**
@@ -26,37 +25,16 @@ class GenerateModel extends AbstractModelMeta {
      * @return boolean|\Exception
      */
     public final function __builder(object $builderMeta, bool $table = false) : bool|\Exception {
-        $ok = false;
         try {
-            $modelFiber = new \Fiber( function($begin) use($builderMeta, &$ok) {
-                if($begin) {
-                    $ok = $this->buildTableFromMeta($builderMeta);
-                    \Fiber::suspend($begin);
-                }
-                \Fiber::suspend($begin);
-            });
-
-            $modelFiber->start(begin: $table);
-            if(!$modelFiber->resume($this->generateModelFile($builderMeta))) {
-                throw new \Exception("Model Building Failed");
-            }
-            return false;
+            // Table creation removed; only generate model and repository files
+            return $this->generateModelFile($builderMeta);
         } catch (\Exception $ex) {
             $this->logger[__FUNCTION__] = $ex->getMessage();
-            $ok = false;
+            return false;
         }
-        return $ok;
     }
 
-    /**
-     * buildTableFromMeta - Builds table from YAML Object
-     *
-     * @param object $builderMeta
-     * @return boolean|\Exception
-     */
-    protected function buildTableFromMeta(object $builderMeta) : bool | \Exception {
-       return  $this->extractMeta($builderMeta)->generateTable();
-    }
+    // Table generation has been removed.
 
     /**
      * buildModelFromMeta - builds a POPO (Plain Old PHP Object) from YAML Object
@@ -96,14 +74,7 @@ class GenerateModel extends AbstractModelMeta {
     /**
      * @return bool
      */
-    private function generateTable() : bool {
-        try {
-            return $this->driverObject->create($this->metaObject);
-        } catch (\Exception $ex) {
-            $this->setLogs([__FUNCTION__ => $ex->getMessage()]);
-            return false;
-        }
-    }
+    // Table generation removed; driver usage eliminated.
 
     /**
      * @param object $builderMeta
@@ -111,7 +82,9 @@ class GenerateModel extends AbstractModelMeta {
      */
     private function generateModelFile(object $builderMeta) : bool {
         try {
-            return (new Generator())->generateModel($builderMeta);
+            $modelOk = (new Generator())->generateModel($builderMeta);
+            $repoOk = (new RepoGenerator())->generateRepository($builderMeta);
+            return (bool)($modelOk && $repoOk);
         } catch (\Exception $ex) {
             $this->setLogs([__FUNCTION__ => $ex->getMessage()]);
             return false;

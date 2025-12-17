@@ -1,5 +1,5 @@
 <?php
-namespace EntityORM\EntityGenerator\ModelMeta;
+namespace EntityForge\EntityGenerator\ModelMeta;
 use Exception;
 
 abstract class AbstractModelMeta {
@@ -143,13 +143,6 @@ abstract class AbstractModelMeta {
      * @return boolean|Exception
      */
     abstract protected function validateModel(object $yamlObject) : bool| \Exception;
-    /**
-     * buildTableFromMeta - Builds table from JSON Object
-     *
-     * @param object $builderMeta
-     * @return boolean|Exception
-     */
-    abstract protected function buildTableFromMeta(object $builderMeta) : bool | \Exception;
     /**
      * buildModelFromMeta - builds a POPO (Plain Old PHP Object) from YAML Object
      *

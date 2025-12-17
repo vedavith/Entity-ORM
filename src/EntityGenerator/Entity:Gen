@@ -1,11 +1,11 @@
 #!/usr/bin/php
 <?php
 
-require_once '../vendor/autoload.php';
-require_once '../EntityGenerator/BuildEntity.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/BuildEntity.php';
 
 use Symfony\Component\Console\Application;
-use EntityORM\EntityGenerator\BuildEntity as EntityBuilder;
+use EntityForge\EntityGenerator\BuildEntity as EntityBuilder;
 
 
 class CommandBuilder extends Application {

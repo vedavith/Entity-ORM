@@ -2,7 +2,7 @@
 
 // This File is Generated with Entity ORM. 
 
-namespace EntityORM\EntityModels;
+namespace EntityForge\EntityModels;
 
 class UserData
 {
@@ -28,7 +28,7 @@ class UserData
 	/** __get **/
 	public function __get($property) {
 	 if (property_exists($this,$property)) {
-		 return $this->$property();
+		 return $this->$property;
 	 }
 	}
 

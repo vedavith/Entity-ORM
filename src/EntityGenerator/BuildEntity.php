@@ -1,5 +1,5 @@
 <?php
-namespace EntityORM\EntityGenerator;
+namespace EntityForge\EntityGenerator;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command as Cmd;
@@ -11,9 +11,9 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\StreamOutput as Streamout;
 
 //ModelGenerator
-use EntityORM\EntityGenerator\GenerateModel as ModelGenerator;
+use EntityForge\EntityGenerator\GenerateModel as ModelGenerator;
 
-//use EntityORM\EntityConnector\EntityDriver;
+//use EntityForge\EntityConnector\EntityDriver;
 
 class BuildEntity extends Cmd {
     protected static $defaultName = 'create-model';
@@ -29,10 +29,9 @@ class BuildEntity extends Cmd {
 
     protected function configure() : void {
         $this->setName('create-model')
-            ->setDescription('Creates a table and generates a model in models path')
-            ->setHelp("Allows user to generate a table depending on model YAML file\n Usage: Entity:Gen generate-models --model=[modelName]")
-            ->addOption('model', null, Inop::VALUE_REQUIRED)
-            ->addOption('table', null, Inop::VALUE_REQUIRED);
+            ->setDescription('Generates model and repository from a JSON model file')
+            ->setHelp("Generates model and repository files from a JSON model definition\n Usage: Entity:Gen create-model --model=[modelName]")
+            ->addOption('model', null, Inop::VALUE_REQUIRED);
     }
 
     protected function execute(Input $input, Output $output) : ?int
@@ -45,11 +44,12 @@ class BuildEntity extends Cmd {
                 throw new \Exception("Please provide the file-name which has *.model.json extension");
             }
 
-            // Should we create table or just update the model
-            $table = $input->getOption('table') === 'true';
+            // Table creation temporarily disabled; always update model only
+            $table = false;
 
-            // Reading models from given file path
-            $path = '../JsonModels/'.$model.'.model.json';
+            // Reading models from given file path (use __DIR__ so path is correct regardless of CWD)
+            // Json models are stored under src/JsonModels
+            $path = __DIR__ . '/../JsonModels/' . $model . '.model.json';
             if(!file_exists($path)) {
                 throw new \Exception("File not found");
             }
@@ -58,7 +58,7 @@ class BuildEntity extends Cmd {
             $output->writeln('<comment>Reading a Json file...</comment>');
             $fileData = file_get_contents($path);
             $model = json_decode($fileData);
-            $output->writeln('<comment>Generating Table and Models...</comment>');
+            $output->writeln('<comment>Generating Models and Repositories...</comment>');
 
             // Generating Models
             if($this->modGenObject->__builder(builderMeta: (object)$model, table: $table) instanceof \Exception) {

@@ -1,6 +1,7 @@
 {
-    "name": "entity-orm/entity-orm",
-    "description": "A simple PHP Entity ORM for generating and managing entity models",
+    "name": "entity-forge/entity-forge",
+    "version": "1.0",
+    "description": "EntityForge — a simple PHP library to generate and manage entity models",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -16,15 +17,16 @@
         "symfony/dependency-injection": "^v7.1.1"
     },
     "require-dev": {
+        "phpunit/phpunit": "^9.6"
     },
     "autoload": {
         "psr-4": {
-            "EntityORM\\": "src/"
+            "EntityForge\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "EntityORM\\Tests\\": "tests/"
+            "EntityForge\\Tests\\": "tests/"
         }
     }
 }
