@@ -1,8 +1,8 @@
 /node_modules
 /public/storage
 /storage/*.key
-/vendor
 /.idea
 .env
-/vendor/*
 .DS_Store
+composer.lock
+/vendor
