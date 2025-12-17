@@ -1,4 +1,4 @@
-# Entity-ORM
+# Entity-Forge
 
 A simple PHP Entity ORM for generating and managing entity models.
 
